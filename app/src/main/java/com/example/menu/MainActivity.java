@@ -11,13 +11,22 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.menu.Permissions.StoragePermissionManager;
 import com.example.menu.R;
 import com.example.menu.fragment.HomeFragment;
 import com.example.menu.fragment.MenuFragment;
 import com.example.menu.fragment.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
+
+    @Inject
+    StoragePermissionManager storagePermissionManager;
 
     private HomeFragment homeFragment;
     private MenuFragment menuFragment;
@@ -37,28 +46,16 @@ public class MainActivity extends AppCompatActivity {
         menuFragment = new MenuFragment();
         settingsFragment = new SettingsFragment();
 
-        showFragment(homeFragment);
+        storagePermissionManager = new StoragePermissionManager(this);
 
-        // Request storage permission
-        if (isStoragePermissionGranted()) {
-            // Permission granted
+        if (!storagePermissionManager.isStoragePermissionGranted()) {
+            storagePermissionManager.requestStoragePermission();
         } else {
-            requestStoragePermission();
+            showFragment(homeFragment);
         }
     }
 
-    private boolean isStoragePermissionGranted() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestStoragePermission() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                STORAGE_PERMISSION_CODE);
-    }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener navItemSelectedListener =
+    private final BottomNavigationView.OnNavigationItemSelectedListener navItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -89,7 +86,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+                showFragment(homeFragment);
             } else {
+                // Permission denied
             }
         }
     }
