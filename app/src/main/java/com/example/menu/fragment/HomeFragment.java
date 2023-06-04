@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -17,10 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.menu.Api.MenuApiClient;
 import com.example.menu.R;
 import com.example.menu.adapters.ItemAdapter;
 import com.example.menu.models.Item;
-import com.example.menu.adapters.MyApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
-    private MyApiClient myApiClient;
+    private MenuApiClient menuApiClient;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,15 +42,12 @@ public class HomeFragment extends Fragment {
         itemAdapter = new ItemAdapter(getActivity(), new ArrayList<>()); // Initialize with an empty list
         recyclerView.setAdapter(itemAdapter);
 
-        myApiClient = new MyApiClient();
+        menuApiClient = new MenuApiClient();
 
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                fetchItems(); // Refresh the item list
-                swipeRefreshLayout.setRefreshing(false); // Indicate that the refresh is complete
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            fetchItems(); // Refresh the item list
+            swipeRefreshLayout.setRefreshing(false); // Indicate that the refresh is complete
         });
 
         if (checkPermission()) {
@@ -63,9 +59,8 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-
     private void fetchItems() {
-        myApiClient.getItems(new MyApiClient.ItemCallback() {
+        menuApiClient.getItems(new MenuApiClient.MenuApiCallback<List<Item>>() {
             @Override
             public void onSuccess(List<Item> items) {
                 itemAdapter.setItems(items);

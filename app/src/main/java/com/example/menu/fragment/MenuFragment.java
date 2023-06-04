@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -16,9 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.menu.Api.CategoryApiClient;
 import com.example.menu.R;
 import com.example.menu.adapters.CategoryAdapter;
-import com.example.menu.adapters.MyApiClient;
 import com.example.menu.models.Category;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class MenuFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private CategoryAdapter categoryAdapter;
-    private MyApiClient myApiClient;
+    private CategoryApiClient categoryApiClient;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -39,7 +38,7 @@ public class MenuFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         categoryAdapter = new CategoryAdapter(getActivity(), new ArrayList<>()); // Initialize with an empty list
         recyclerView.setAdapter(categoryAdapter);
-        myApiClient = new MyApiClient();
+        categoryApiClient = new CategoryApiClient();
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             fetchCategories(); // Refresh the category list
@@ -56,7 +55,7 @@ public class MenuFragment extends Fragment {
     }
 
     private void fetchCategories() {
-        myApiClient.getCategories(new MyApiClient.CategoryCallback() {
+        categoryApiClient.getCategories(new CategoryApiClient.CategoryApiCallback<List<Category>>() {
             @Override
             public void onSuccess(List<Category> categories) {
                 categoryAdapter.setCategories(categories);

@@ -3,7 +3,6 @@ package com.example.menu;
 import android.app.Application;
 import android.content.Context;
 import com.example.menu.Permissions.PermissionManager;
-import com.example.menu.adapters.MyApiClient;
 
 import dagger.Module;
 import dagger.Provides;
