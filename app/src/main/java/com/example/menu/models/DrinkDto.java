@@ -1,10 +1,13 @@
 package com.example.menu.models;
 
-public class Category {
+public class DrinkDto {
     private int id;
     private String name;
 
-    public Category(int id, String name) {
+    public DrinkDto() {
+    }
+
+    public DrinkDto(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -13,7 +16,15 @@ public class Category {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
