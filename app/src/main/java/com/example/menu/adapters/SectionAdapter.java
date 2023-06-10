@@ -12,6 +12,10 @@ import com.example.menu.models.SectionDto;
 import java.util.List;
 
 public class SectionAdapter extends ArrayAdapter<SectionDto> {
+    public interface OnItemClickListener {
+        void onItemClick(SectionDto section);
+    }
+
     private final LayoutInflater inflater;
 
     public SectionAdapter(Context context, List<SectionDto> sections) {

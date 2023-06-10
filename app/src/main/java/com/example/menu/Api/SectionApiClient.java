@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SectionApiClient {
-    private static final String BASE_URL = "http://192.168.75.101:5043/api/";
+    private static final String BASE_URL = "http://192.168.5.101:5043/api/";
 
     public static List<SectionDto> getSections() throws IOException, JSONException {
         OkHttpClient client = new OkHttpClient();

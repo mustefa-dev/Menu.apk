@@ -23,7 +23,7 @@ public class DrinksPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         if (position >= 0 && position < sections.size()) {
             SectionDto section = sections.get(position);
-            return SectionFragment.newInstance(section.getName());
+            return SectionFragment.newInstance(section);
         } else {
             return null;
         }
