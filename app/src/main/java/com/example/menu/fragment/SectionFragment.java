@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.menu.Api.DrinkApiClient;
@@ -19,14 +19,7 @@ import com.example.menu.adapters.DrinkAdapter;
 import com.example.menu.models.SectionDto;
 import com.example.menu.models.DrinkDto;
 
-import java.io.IOException;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class SectionFragment extends Fragment {
     private static final String ARG_SECTION = "section";
@@ -93,16 +86,10 @@ public class SectionFragment extends Fragment {
         });
     }
 
-    private List<DrinkDto> parseDrinksFromResponse(String responseBody) {
-        // Implement the logic to parse the JSON response and convert it to a List<DrinkDto>
-        // You can use a JSON parsing library like Gson or manual parsing with JSONObject/JSONArray
-        // Return the List<DrinkDto> parsed from the response body
-        return null;
-    }
-
     private void setupDrinkRecyclerView(List<DrinkDto> drinks) {
+        int numColumns = 2; // Set the number of columns you want to display
         drinkAdapter = new DrinkAdapter(drinks);
-        drinkRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        drinkRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
         drinkRecyclerView.setAdapter(drinkAdapter);
     }
 }

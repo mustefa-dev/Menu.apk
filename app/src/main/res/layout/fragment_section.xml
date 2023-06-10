@@ -5,14 +5,19 @@
 
     <TextView
         android:id="@+id/section_name_text_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp" />
+        android:padding="16dp"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/drink_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="8dp" />
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:background="@android:color/white"
+        android:nestedScrollingEnabled="false" />
 
 </LinearLayout>

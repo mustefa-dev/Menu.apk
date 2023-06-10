@@ -1,7 +1,5 @@
 package com.example.menu.Api;
 
-import android.content.Context;
-
 import com.example.menu.models.DrinkDto;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,13 +18,13 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class DrinkApiClient {
-    private static final String BASE_URL = "http://192.168.5.101:5043/api/";
+    private static final String BASE_URL = "http://192.168.5.101:5043/";
 
     public void getDrinksBySectionName(String sectionName, DrinkCallback callback) {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url(BASE_URL + "drinks/section/" + sectionName)
+                .url(BASE_URL + "api/drinks/section/" + sectionName)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -57,7 +55,15 @@ public class DrinkApiClient {
                 JSONObject jsonDrink = jsonArray.getJSONObject(i);
                 int id = jsonDrink.getInt("id");
                 String name = jsonDrink.getString("name");
-                DrinkDto drink = new DrinkDto(id, name);
+                String sectionName = jsonDrink.getString("sectionName");
+                int sectionId = jsonDrink.getInt("sectionId");
+                double price = jsonDrink.getDouble("price");
+                String description = jsonDrink.getString("description");
+                String photoUrl = jsonDrink.getString("photo");
+
+                String fullPhotoUrl = BASE_URL + photoUrl;
+
+                DrinkDto drink = new DrinkDto(id, name, sectionName, sectionId, price, description, fullPhotoUrl);
                 drinks.add(drink);
             }
             return drinks;
