@@ -1,6 +1,6 @@
 package com.example.menu.models;
 
-public class DrinkDto {
+public class FoodDto {
     private int id;
     private String name;
     private String sectionName;
@@ -9,10 +9,10 @@ public class DrinkDto {
     private String description;
     private String photo;
 
-    public DrinkDto() {
+    public FoodDto() {
     }
 
-    public DrinkDto(int id, String name, String sectionName, double price, String description, String photo) {
+    public FoodDto(int id, String name, String sectionName, double price, String description, String photo) {
         this.id = id;
         this.name = name;
         this.sectionName = sectionName;
@@ -37,20 +37,20 @@ public class DrinkDto {
         this.name = name;
     }
 
-    public String getSectionName() {
-        return sectionName;
-    }
-
-    public void setSectionName(String sectionName) {
-        this.sectionName = sectionName;
-    }
-
     public int getSectionId() {
         return sectionId;
     }
 
     public void setSectionId(int sectionId) {
         this.sectionId = sectionId;
+    }
+
+    public String getSectionName() {
+        return sectionName;
+    }
+
+    public void setSectionName(String sectionName) {
+        this.sectionName = sectionName;
     }
 
     public double getPrice() {

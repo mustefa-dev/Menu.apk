@@ -1,6 +1,6 @@
 package com.example.menu.Api;
 
-import com.example.menu.models.DrinkDto;
+import com.example.menu.models.FoodDto;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -17,14 +17,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class DrinkApiClient {
+public class FoodApiClient {
     private static final String BASE_URL = "http://192.168.28.101:5043/";
 
-    public void getDrinksBySectionName(String sectionName, DrinkCallback callback) {
+    public void getFoodBySectionName(String sectionName, FoodCallback callback) {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url(BASE_URL + "api/drinks/section/" + sectionName)
+                .url(BASE_URL + "api/foods/section/" + sectionName)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -32,49 +32,48 @@ public class DrinkApiClient {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().string();
-                    List<DrinkDto> drinks = parseDrinksFromResponse(responseBody);
-                    callback.onSuccess(drinks);
+                    List<FoodDto> foodList = parseFoodFromResponse(responseBody);
+                    callback.onSuccess(foodList);
                 } else {
-                    callback.onFailure("Failed to fetch drinks. Please try again.");
+                    callback.onFailure("Failed to fetch food. Please try again.");
                 }
             }
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
-                callback.onFailure("Failed to fetch drinks. Please check your internet connection and try again.");
+                callback.onFailure("Failed to fetch food. Please check your internet connection and try again.");
             }
         });
     }
 
-    private List<DrinkDto> parseDrinksFromResponse(String responseBody) {
+    private List<FoodDto> parseFoodFromResponse(String responseBody) {
         try {
             JSONArray jsonArray = new JSONArray(responseBody);
-            List<DrinkDto> drinks = new ArrayList<>();
+            List<FoodDto> foodList = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonDrink = jsonArray.getJSONObject(i);
-                int id = jsonDrink.getInt("id");
-                String name = jsonDrink.getString("name");
-                String sectionName = jsonDrink.getString("sectionName");
-                double price = jsonDrink.getDouble("price");
-                String description = jsonDrink.getString("description");
-                String photoUrl = jsonDrink.getString("photo");
+                JSONObject jsonFood = jsonArray.getJSONObject(i);
+                int id = jsonFood.getInt("id");
+                String name = jsonFood.getString("name");
+                String sectionName = jsonFood.getString("sectionName");
+                double price = jsonFood.getDouble("price");
+                String description = jsonFood.getString("description");
+                String photoUrl = jsonFood.getString("photo");
 
                 String fullPhotoUrl = BASE_URL + photoUrl;
 
-                DrinkDto drink = new DrinkDto(id, name, sectionName, price, description, fullPhotoUrl);
-                drinks.add(drink);
+                FoodDto food = new FoodDto(id, name, sectionName, price, description, fullPhotoUrl);
+                foodList.add(food);
             }
-            return drinks;
+            return foodList;
         } catch (JSONException e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>();
         }
     }
 
-
-    public interface DrinkCallback {
-        void onSuccess(List<DrinkDto> drinks);
+    public interface FoodCallback {
+        void onSuccess(List<FoodDto> foodList);
 
         void onFailure(String errorMessage);
     }

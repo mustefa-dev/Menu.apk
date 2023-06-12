@@ -40,9 +40,10 @@ public class DrinksFragment extends Fragment {
     }
 
     private void fetchSections() {
-        Thread thread = new Thread(() -> {
-            try {
-                List<SectionDto> sections = SectionApiClient.getSections();
+        SectionApiClient sectionApiClient = new SectionApiClient();
+        sectionApiClient.getSections(new SectionApiClient.SectionCallback() {
+            @Override
+            public void onSuccess(List<SectionDto> sections) {
                 getActivity().runOnUiThread(() -> {
                     if (!sections.isEmpty()) {
                         pagerAdapter = new DrinksPagerAdapter(getChildFragmentManager(), sections);
@@ -50,10 +51,12 @@ public class DrinksFragment extends Fragment {
                         tabLayout.setupWithViewPager(viewPager);
                     }
                 });
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Handle the error case
             }
         });
-        thread.start();
     }
 }

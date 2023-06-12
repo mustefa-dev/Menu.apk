@@ -12,23 +12,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SectionApiClient {
-    private static final String BASE_URL = "http://192.168.5.101:5043/api/";
+    private static final String BASE_URL = "http://192.168.28.101:5043/api/";
 
-    public static List<SectionDto> getSections() throws IOException, JSONException {
-        OkHttpClient client = new OkHttpClient();
+    private static OkHttpClient client;
 
+    public SectionApiClient() {
+        client = new OkHttpClient();
+    }
+
+    public static void getSections(SectionCallback callback) {
         Request request = new Request.Builder()
                 .url(BASE_URL + "Section")
                 .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
-                String responseBody = response.body().string();
-                return parseSectionResponse(responseBody);
-            } else {
-                throw new IOException("Unexpected response code: " + response.code());
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
+                    List<SectionDto> sections;
+                    try {
+                        sections = parseSectionResponse(responseBody);
+                        callback.onSuccess(sections);
+                    } catch (JSONException e) {
+                        callback.onFailure("Error parsing section response");
+                    }
+                } else {
+                    callback.onFailure("Unexpected response code: " + response.code());
+                }
             }
-        }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure("Request failed: " + e.getMessage());
+            }
+        });
     }
 
     private static List<SectionDto> parseSectionResponse(String responseBody) throws JSONException {
@@ -45,5 +63,11 @@ public class SectionApiClient {
         }
 
         return sections;
+    }
+
+    public interface SectionCallback {
+        void onSuccess(List<SectionDto> sections);
+
+        void onFailure(String errorMessage);
     }
 }
