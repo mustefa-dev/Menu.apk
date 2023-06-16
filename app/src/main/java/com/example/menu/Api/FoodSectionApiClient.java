@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FoodSectionApiClient {
-    private static final String BASE_URL = "http://192.168.28.101:5043/api/";
+    private static final String BASE_URL = "http://192.168.31.93:5043/api/";
 
     public static List<FoodSectionDto> getFoodSections() throws IOException, JSONException {
         OkHttpClient client = new OkHttpClient();

@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.menu.fragment.SectionFragment;
+import com.example.menu.fragment.DrinkSectionFragment;
 import com.example.menu.models.SectionDto;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class DrinksPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         if (position >= 0 && position < sections.size()) {
             SectionDto section = sections.get(position);
-            return SectionFragment.newInstance(section);
+            return DrinkSectionFragment.newInstance(section);
         } else {
             return null;
         }

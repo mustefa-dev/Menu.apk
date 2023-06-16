@@ -4,8 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,27 +14,20 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.menu.Api.FoodApiClient;
-import com.example.menu.Api.SectionApiClient;
 import com.example.menu.R;
 import com.example.menu.adapters.FoodAdapter;
-import com.example.menu.adapters.SectionAdapter;
 import com.example.menu.models.FoodDto;
 import com.example.menu.models.FoodSectionDto;
-import com.example.menu.models.SectionDto;
 
-import java.io.IOException;
 import java.util.List;
 
 public class FoodSectionFragment extends Fragment {
     private static final String ARG_SECTION = "section";
 
     private FoodSectionDto section;
-    private GridView sectionGridView;
+    private TextView sectionTextView;
     private RecyclerView foodRecyclerView;
     private FoodAdapter foodAdapter;
-
-    private SectionAdapter sectionAdapter;
-    private SectionApiClient sectionApiClient;
 
     public FoodSectionFragment() {
         // Required empty public constructor
@@ -55,46 +47,19 @@ public class FoodSectionFragment extends Fragment {
         if (getArguments() != null) {
             section = getArguments().getParcelable(ARG_SECTION);
         }
-        sectionApiClient = new SectionApiClient();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_food_section, container, false);
-        sectionGridView = view.findViewById(R.id.grid_view_sections);
-        foodRecyclerView = view.findViewById(R.id.food_recycler_view);
+        View view = inflater.inflate(R.layout.fragment_section, container, false);
+        sectionTextView = view.findViewById(R.id.section_name_text_view);
+        foodRecyclerView = view.findViewById(R.id.drink_recycler_view);
 
-        try {
-            setupSectionGridView();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        sectionTextView.setText(section.getName());
+
         fetchFoodBySection(section.getName());
 
         return view;
-    }
-
-    private void setupSectionGridView() throws IOException {
-        sectionApiClient.getSections(new SectionApiClient.SectionCallback() {
-            @Override
-            public void onSuccess(List<SectionDto> sections) {
-                sectionAdapter = new SectionAdapter(getContext(), sections);
-                sectionGridView.setAdapter(sectionAdapter);
-
-                sectionGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        SectionDto selectedSection = sections.get(position);
-                        fetchFoodBySection(selectedSection.getName());
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(String errorMessage) {
-                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void fetchFoodBySection(String sectionName) {
@@ -104,10 +69,9 @@ public class FoodSectionFragment extends Fragment {
             public void onSuccess(List<FoodDto> foodList) {
                 requireActivity().runOnUiThread(() -> {
                     if (foodList != null && !foodList.isEmpty()) {
-                        showFoodRecyclerView();
                         setupFoodRecyclerView(foodList);
                     } else {
-                        hideFoodRecyclerView();
+                        // Handle empty food response
                         Toast.makeText(getContext(), "No food available for this section.", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -116,7 +80,6 @@ public class FoodSectionFragment extends Fragment {
             @Override
             public void onFailure(String errorMessage) {
                 requireActivity().runOnUiThread(() -> {
-                    hideFoodRecyclerView();
                     Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                 });
             }
@@ -124,16 +87,9 @@ public class FoodSectionFragment extends Fragment {
     }
 
     private void setupFoodRecyclerView(List<FoodDto> foodList) {
+        int numColumns = 2; // Set the number of columns you want to display
         foodAdapter = new FoodAdapter(foodList);
-        foodRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // Change the number of columns as needed
+        foodRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), numColumns));
         foodRecyclerView.setAdapter(foodAdapter);
-    }
-
-    private void showFoodRecyclerView() {
-        foodRecyclerView.setVisibility(View.VISIBLE);
-    }
-
-    private void hideFoodRecyclerView() {
-        foodRecyclerView.setVisibility(View.GONE);
     }
 }

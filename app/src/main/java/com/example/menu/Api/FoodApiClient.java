@@ -18,7 +18,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class FoodApiClient {
-    private static final String BASE_URL = "http://192.168.28.101:5043/";
+    private static final String BASE_URL = "http://192.168.31.93:5043/";
 
     public void getFoodBySectionName(String sectionName, FoodCallback callback) {
         OkHttpClient client = new OkHttpClient();

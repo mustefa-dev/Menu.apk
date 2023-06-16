@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +19,7 @@ import com.example.menu.models.DrinkDto;
 
 import java.util.List;
 
-public class SectionFragment extends Fragment {
+public class DrinkSectionFragment extends Fragment {
     private static final String ARG_SECTION = "section";
 
     private SectionDto section;
@@ -29,12 +27,12 @@ public class SectionFragment extends Fragment {
     private RecyclerView drinkRecyclerView;
     private DrinkAdapter drinkAdapter;
 
-    public SectionFragment() {
+    public DrinkSectionFragment() {
         // Required empty public constructor
     }
 
-    public static SectionFragment newInstance(SectionDto section) {
-        SectionFragment fragment = new SectionFragment();
+    public static DrinkSectionFragment newInstance(SectionDto section) {
+        DrinkSectionFragment fragment = new DrinkSectionFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_SECTION, section);
         fragment.setArguments(args);
