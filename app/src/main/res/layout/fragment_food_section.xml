@@ -3,21 +3,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <GridView
-        android:id="@+id/grid_view_sections"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="2"
-        android:columnWidth="200dp"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="16dp"
-        android:horizontalSpacing="16dp" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/food_recycler_view"
+        android:id="@+id/section_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:visibility="gone" />
+        android:layout_height="match_parent" />
+
 
 </LinearLayout>
